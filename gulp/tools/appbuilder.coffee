@@ -1,5 +1,7 @@
 
+#
 # Module dependencies
+#
 
 gulp        = require "gulp"
 path        = require "path"
@@ -7,9 +9,16 @@ watchify    = require "watchify"
 browserSync = require "browser-sync"
 source      = require "vinyl-source-stream"
 
-jade        = require "gulp-jade"
-stylus      = require "gulp-stylus"
+# Utils
 notify      = require "gulp-notify"
+clean       = require "gulp-clean"
+
+# Markup
+jade        = require "gulp-jade"
+
+# Style
+stylus      = require "gulp-stylus"
+prefix      = require "gulp-autoprefixer"
 
 # Utility to make easier building tasks for a web application. It provides
 # features to build:
@@ -18,9 +27,9 @@ notify      = require "gulp-notify"
 # - stylus stylesheets
 # - fonts & images
 #
-class Builder
+class AppBuilder
 
-  ASSETS_EXTENSIONS = [
+  DEFAULT_ASSETS_EXTENSIONS = [
     "png", "jpg", "jpeg", "gif" # images
     "eot", "svg", "ttf", "woff" # fonts
   ]
@@ -61,6 +70,7 @@ class Builder
   #
   buildScripts: (entry = "scripts/index.coffee") ->
     bundler = watchify(
+      transform: ['coffeeify']
       entries: ["./" + path.join(@options.src, entry)]
       extensions: [".coffee"]
     )
@@ -83,8 +93,26 @@ class Builder
     @addFiles('Styles', styles ? ["styles/**/*.styl"])
     gulp.src(path.join(@options.src, entry))
       .pipe(stylus().on('error', @handleError))
+      .pipe(prefix())
       .pipe(gulp.dest(@options.dest))
       .pipe(browserSync.reload(stream: true))
+
+  # Move the assets of the application into the build folder.
+  #
+  # @param {String} folder application's folder which contains all assets
+  # @param {Array<String>} ext the allowed extensions to copy
+  #
+  buildAssets: (folder = "assets/", ext) ->
+    ext ?= DEFAULT_ASSETS_EXTENSIONS
+    assets = @addFiles('Assets', ["#{folder}/**/*.{#{ext.join(',')}}"])
+    gulp.src(assets)
+      .pipe(gulp.dest(path.join(@options.dest, folder)))
+
+  # Remove the build folder and all the files inside recursively.
+  #
+  clean: ->
+    gulp.src(path.join(@options.dest, "**/*"), read: false)
+      .pipe(clean())
 
   # Add the root paths to the given `files`, and add them to the watchList.
   #
@@ -108,4 +136,4 @@ class Builder
     ).apply(@, args)
     @emit('end')
 
-module.exports = Builder
+module.exports = AppBuilder

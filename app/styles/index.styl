@@ -1,5 +1,14 @@
 
+// Dependencies
+
 @import "config.styl"
+@import url("http://fonts.googleapis.com/css?family=Josefin+Slab")
+
+// Some general style
+
+::selection
+  background flat_blue
+  color white
 
 body
   font-family font_body
@@ -7,7 +16,7 @@ body
   padding 50px
 
 h1
-  font-family font_title
+  font-family 'Josefin Slab'
   color bw_title
 
 a
@@ -17,3 +26,12 @@ a
   &:hover
     color flat_dark_blue
     border-bottom 1px solid flat_dark_blue
+
+// Header's style
+
+header
+  text-align center
+  img
+    width: 200px
+  h1
+    font-size 3em

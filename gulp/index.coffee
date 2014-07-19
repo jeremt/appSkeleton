@@ -6,7 +6,7 @@ browserSync = require "browser-sync"
 gulp        = require "gulp"
 notify      = require "gulp-notify"
 source      = require "vinyl-source-stream"
-Builder     = require "./tools/builder"
+AppBuilder  = require "./tools/appbuilder"
 
 # Utils
 
@@ -19,13 +19,20 @@ onError = (args...) ->
 
 # Tasks
 
-app = new Builder()
+app = new AppBuilder()
 
 gulp.task "buildMarkup", -> app.buildMarkup()
 gulp.task "buildScripts", -> app.buildScripts()
 gulp.task "buildStyles", -> app.buildStyles()
+gulp.task "buildAssets", -> app.buildAssets()
+gulp.task "clean", -> app.clean()
 
-gulp.task "build", ["buildMarkup", "buildScripts", "buildStyles"]
+gulp.task "build", [
+  "buildMarkup"
+  "buildScripts"
+  "buildStyles"
+  "buildAssets"
+]
 
 gulp.task "serve", ["build"], ->
   browserSync.init null,
@@ -36,7 +43,6 @@ gulp.task "serve", ["build"], ->
       baseDir: "build"
 
 gulp.task "watch", ["serve"], ->
-  console.log app.watchList
   for name, list of app.watchList
     for pattern in list
       gulp.watch pattern, [name]
