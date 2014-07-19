@@ -3,11 +3,18 @@ block content
   header
     img(src="/assets/skeleton.png")
     h1 AppSkeleton
-  p.
-    Simple skeleton of a web application which use feature such as:
-  ul
-    each feature in ['Jade', 'Stylus', 'CoffeeScript', 'Browserify', '...']
-      li=feature
+  nav
+    a(href="#") home
+    a(href="#install") install
+    a(href="https://github.com/jeremt/appSkeleton") github
+  div#home(ng-controller="HomeCtrl")
+    p.
+      Simple skeleton of a web application which use feature such as:
+    ul(ng-repeat="feature in features")
+      li() {{feature}}
+  //- ul
+  //-   each feature in ['Jade', 'Stylus', 'CoffeeScript', 'Browserify', '...']
+  //-     li=feature
   p 
     | Using the simple but powerful #[a(href="http://gulpjs.com") gulp ]
     | build system.

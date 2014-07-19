@@ -6,8 +6,17 @@
     "type": "git",
     "url": "git://github.com/jeremt/appSkeleton.git"
   },
+  "browserify-shim": {
+    "angular": "angular"
+  },
+  "browser": {
+    "angular": "./bower_components/angular/angular.js"
+  },
   "browserify": {
-    "transform": [ "coffeeify" ]
+    "transform": [
+      "browserify-shim",
+      "coffeeify"
+    ]
   },
   "devDependencies": {
     "browser-sync": "~0.8.2",
@@ -30,6 +39,7 @@
     "gulp-jade": "^0.6.1",
     "gulp-stylus": "^1.1.0",
     "gulp-autoprefixer": "0.0.8",
-    "gulp-clean": "^0.3.1"
+    "gulp-clean": "^0.3.1",
+    "gulp-bower": "0.0.6"
   }
 }

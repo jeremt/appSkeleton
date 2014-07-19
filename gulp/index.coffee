@@ -1,21 +1,10 @@
 
 # Module dependencies
 
-watchify    = require "watchify"
-browserSync = require "browser-sync"
 gulp        = require "gulp"
-notify      = require "gulp-notify"
-source      = require "vinyl-source-stream"
+bower       = require "gulp-bower"
+browserSync = require "browser-sync"
 AppBuilder  = require "./tools/appbuilder"
-
-# Utils
-
-onError = (args...) ->
-  notify.onError(
-    title: "Compile Error",
-    message: "<%= error.message %>"
-  ).apply(@, args)
-  @emit('end')
 
 # Tasks
 
@@ -26,12 +15,14 @@ gulp.task "buildScripts", -> app.buildScripts()
 gulp.task "buildStyles", -> app.buildStyles()
 gulp.task "buildAssets", -> app.buildAssets()
 gulp.task "clean", -> app.clean()
+gulp.task "buildBower", -> bower().pipe(gulp.dest('build'))
 
 gulp.task "build", [
   "buildMarkup"
   "buildScripts"
   "buildStyles"
   "buildAssets"
+  "buildBower"
 ]
 
 gulp.task "serve", ["build"], ->

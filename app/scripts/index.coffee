@@ -1,4 +1,7 @@
 
-AppCtrl = require './controllers/app'
+angular = require "angular"
+HomeCtrl = require './controllers/home'
 
-new AppCtrl
+app = angular.module('sk', [])
+
+app.controller('HomeCtrl', HomeCtrl)
