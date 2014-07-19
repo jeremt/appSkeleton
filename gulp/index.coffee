@@ -6,6 +6,7 @@ browserSync = require "browser-sync"
 gulp        = require "gulp"
 notify      = require "gulp-notify"
 source      = require "vinyl-source-stream"
+Builder     = require "./tools/builder"
 
 # Utils
 
@@ -18,23 +19,12 @@ onError = (args...) ->
 
 # Tasks
 
+app = new Builder "app"
+
 gulp.task "buildMarkup", ->
   gulp.src("app/index.html").pipe gulp.dest("build")
 
-gulp.task "buildScripts", ->
-  bundler = watchify(
-    entries: ["./app/scripts/index.coffee"]
-    extensions: [".coffee"]
-  )
-  bundle = ->
-    bundler
-      .bundle(debug: true)
-      .on("error", onError)
-      .pipe(source("all.js"))
-      .pipe(gulp.dest("./build/"))
-      .pipe(browserSync.reload(stream: true))
-  bundler.on("update", bundle)
-  bundle()
+gulp.task "buildScripts", -> app.buildScripts()
 
 gulp.task "build", ["buildScripts", "buildMarkup"]
 
