@@ -19,10 +19,10 @@ onError = (args...) ->
 
 # Tasks
 
-app = new Builder "app"
+app = new Builder()
 
-gulp.task "buildMarkup", ->
-  gulp.src("app/index.html").pipe gulp.dest("build")
+gulp.task "buildMarkup", -> app.buildMarkup()
+  # gulp.src("app/index.html").pipe gulp.dest("build")
 
 gulp.task "buildScripts", -> app.buildScripts()
 
@@ -34,6 +34,9 @@ gulp.task "serve", ["build"], ->
       baseDir: "build"
 
 gulp.task "watch", ["serve"], ->
-  gulp.watch "app/index.html", ["buildMarkup"]
+  console.log app.watchList
+  for name, list of app.watchList
+    for pattern in list
+      gulp.watch pattern, [name]
 
 gulp.task 'default', ['watch']
