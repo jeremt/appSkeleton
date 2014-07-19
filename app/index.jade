@@ -4,9 +4,15 @@ block content
     img(src="/assets/skeleton.png")
     h1 AppSkeleton
   nav
-    a(href="#") home
-    a(href="#install") install
-    a(href="https://github.com/jeremt/appSkeleton") github
+    a(href="#")
+      i.fa.fa-home
+      | home
+    a(href="#documentation")
+      i.fa.fa-file-text
+      | documentation
+    a(href="https://github.com/jeremt/appSkeleton")
+      i.fa.fa-github
+      | github
   div#home(ng-controller="HomeCtrl")
     p.
       Simple skeleton of a web application which use feature such as:
