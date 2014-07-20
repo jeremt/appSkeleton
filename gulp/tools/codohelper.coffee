@@ -1,5 +1,6 @@
 Codo        = require 'codo'
 CodoCommand = require 'codo/lib/command'
+gutil       = require 'gulp-util'
 
 class CodoHelper extends CodoCommand
 
@@ -16,28 +17,28 @@ class CodoHelper extends CodoCommand
     @generateSrc()
 
   generateSrc: ->
-    environment = Codo.parseProject(@options.src, @options)
+    console.log @options
+    environment = Codo.parseProject(@options.src)
     sections    = @collectStats(environment)
-
     @theme.compile(environment)
 
-    overall      = 0
-    undocumented = 0
+    # overall      = 0
+    # undocumented = 0
 
-    for section, data of sections
-      overall      += data.total
-      undocumented += data.undocumented.length
+    # for section, data of sections
+    #   overall      += data.total
+    #   undocumented += data.undocumented.length
 
-    console.log ''
-    console.log "  Codo documentation generated from #{@options.src} to #{@options.output}."
-    console.log ''
-    console.log "    Total files   #{environment.allFiles().length}"
-    console.log "    Total extras  #{environment.allExtras().length}"
-    console.log "    Classes       #{sections['Classes'].total} (#{sections['Classes'].undocumented.length} undocumented)"
-    console.log "    Mixins        #{sections['Mixins'].total} (#{sections['Mixins'].undocumented.length} undocumented)"
-    console.log "    Methods       #{sections['Methods'].total} (#{sections['Methods'].undocumented.length} undocumented)"
-    console.log ''
-    console.log "  Totally documented: #{(100 - 100/overall*undocumented).toFixed(2)}%"
-    console.log ''
+    # console.log ''
+    gutil.log "Codo documentation generated from '#{@options.src}' to '#{@options.output}'."
+    # console.log ''
+    # console.log "    Total files   #{environment.allFiles().length}"
+    # console.log "    Total extras  #{environment.allExtras().length}"
+    # console.log "    Classes       #{sections['Classes'].total} (#{sections['Classes'].undocumented.length} undocumented)"
+    # console.log "    Mixins        #{sections['Mixins'].total} (#{sections['Mixins'].undocumented.length} undocumented)"
+    # console.log "    Methods       #{sections['Methods'].total} (#{sections['Methods'].undocumented.length} undocumented)"
+    # console.log ''
+    # console.log "  Totally documented: #{(100 - 100/overall*undocumented).toFixed(2)}%"
+    # console.log ''
 
 module.exports = (options) -> new CodoHelper(options)

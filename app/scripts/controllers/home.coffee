@@ -1,17 +1,15 @@
 
+# @class HomeCtrl
+#
 # It's an angular controller which handle all the behaviour related to the
 # home page of the website.
 #
 module.exports = class
 
-  # Declaring a `$inject` static method into a controller say to angular to
-  # inject the given dependencies into the constructor of the controller.
-  #
   @$inject = ['$scope']
 
-  # Instanciate the controller and initialize the feature array.
-  #
-  # @param {String} scope the angular scope to store binded data
+  # Instanciate the controller and initialize all the feature into an array
+  # which will be displayed in a list.
   #
   constructor: (@scope) ->
     @scope.features = [
