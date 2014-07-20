@@ -5,13 +5,17 @@
 
 gulp        = require "gulp"
 path        = require "path"
-watchify    = require "watchify"
 browserSync = require "browser-sync"
-source      = require "vinyl-source-stream"
 
 # Utils
 notify      = require "gulp-notify"
 clean       = require "gulp-clean"
+
+# Scripts
+watchify    = require "watchify"
+source      = require "vinyl-source-stream"
+coffee      = require "gulp-coffee"
+sourcemaps  = require "gulp-sourcemaps"
 
 # Markup
 jade        = require "gulp-jade"
@@ -32,6 +36,7 @@ class AppBuilder
   DEFAULT_ASSETS_EXTENSIONS = [
     "png", "jpg", "jpeg", "gif" # images
     "eot", "svg", "ttf", "woff" # fonts
+    "json", "xml", "cson"       # config
   ]
 
   DEFAULT_OPTIONS =
@@ -68,7 +73,7 @@ class AppBuilder
   #
   # @param {String} entry the entry point to create browserify module
   #
-  buildScripts: (entry = "scripts/index.coffee") ->
+  buildBrowserify: (entry = "scripts/index.coffee") ->
     bundler = watchify(
       transform: ['coffeeify']
       entries: ["./" + path.join(@options.src, entry)]
@@ -84,13 +89,25 @@ class AppBuilder
     bundler.on("update", bundle)
     bundle()
 
+  # Build scripts without using browserify.
+  #
+  # @param {Array<String>} scripts all the scripts files to compile
+  #
+  buildScripts: (scripts = ["scripts/**/*.coffee"]) ->
+    scripts = @addFiles('Scripts', scripts)
+    gulp.src(scripts)
+      .pipe(sourcemaps.init())
+      .pipe(coffee(bare: true).on('error', @handleError))
+      .pipe(sourcemaps.write())
+      .pipe(gulp.dest(@options.dest))
+
   # Build css from the given stylus files.
   #
   # @param {String} entry the entry point of the stylesheets
   # @param {Array<String>} styles the list of stylesheets to watch
   #
-  buildStyles: (entry = "styles/index.styl", styles) ->
-    @addFiles('Styles', styles ? ["styles/**/*.styl"])
+  buildStyles: (entry = "styles/index.styl", styles = ["styles/**/*.styl"]) ->
+    @addFiles('Styles', styles)
     gulp.src(path.join(@options.src, entry))
       .pipe(stylus().on('error', @handleError))
       .pipe(prefix())

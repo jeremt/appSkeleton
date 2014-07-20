@@ -1,10 +1,13 @@
 extends /partials/layout.jade
 block content
-  div#documentation(ng-controller="DocumentationCtrl")
+  section#documentation(ng-controller="DocumentationCtrl as documentation")
     aside
-      div(ng-repeat="link in links")
-        a(href="{{link.url}}") {{link.name}}
-    p.
-      This page contains all the documentation about AppSkeleton project. In
-      here, you can find the full API-documentation, as well as some tutorials
-      about how to use this project.
+      a(ng-repeat="link in links",
+        ng-class="{'current': $index == current}",
+        ng-click="documentation.changePage($index)")
+        | {{link.name}}
+      a(href="/documentation/api/index.html") API
+
+    div.content(ng-repeat="link in links",
+      ng-show="$index == current",
+      ng-include="documentation.getUrl(link)")

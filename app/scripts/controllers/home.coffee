@@ -1,10 +1,8 @@
 
-# @class HomeCtrl
-#
 # It's an angular controller which handle all the behaviour related to the
 # home page of the website.
 #
-module.exports = class
+class HomeCtrl
 
   @$inject = ['$scope']
 
@@ -22,3 +20,5 @@ module.exports = class
       'Animate.css',
       'FontAwesome'
     ]
+
+module.exports = HomeCtrl

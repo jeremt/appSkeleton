@@ -3,10 +3,11 @@
 # Module dependencies
 #
 gulp        = require 'gulp'
+gutil       = require 'gulp-util'
 fs          = require 'fs'
 path        = require 'path'
 markdown    = require 'gulp-markdown'
-codo        = require '../tools/codohelper'
+spawn       = require('child_process').spawn
 
 # This builder take care of the generation of all documentation files.
 # It will generate coffeescript code documentation as well as building the
@@ -18,6 +19,7 @@ class DocBuilder
     codo:
       theme: 'default'
     tutorials:
+      config: "config.json"
       src: "./tutorials/"
       dest: "./build/documentation/tutorials"
     api:
@@ -38,10 +40,12 @@ class DocBuilder
   # @param {String} src the source markdown files to build
   # @param {String} dest the destination folder of the files
   #
-  buildTutorials: ({src, dest} = {}) ->
+  buildTutorials: ({src, dest, config} = {}) ->
     src ?= DEFAULT_OPTIONS.tutorials.src
     dest ?= DEFAULT_OPTIONS.tutorials.dest
-    console.log fs.readdirSync(src)
+    config ?= DEFAULT_OPTIONS.tutorials.config
+    gulp.src(path.join(src, config))
+      .pipe(gulp.dest(dest))
     gulp.src(path.join(src, "**/*.md"))
       .pipe(markdown())
       .pipe(gulp.dest(dest))
@@ -54,6 +58,9 @@ class DocBuilder
   buildApi: ({src, dest} = {}) ->
     src ?= DEFAULT_OPTIONS.api.src
     dest ?= DEFAULT_OPTIONS.api.dest
-    codo(src: src, output: dest)
+    stream = spawn('codo', [src, '--output', dest])
+    stream.on 'close', ->
+      gutil.log("Generated codo documentation to '#{dest}'")
+
 
 module.exports = DocBuilder

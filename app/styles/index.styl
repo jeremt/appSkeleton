@@ -9,22 +9,26 @@
   background flat_blue
   color white
 
+*
+  box-sizing border-box
+
 body
   animation bounceInDown 1s
   font-family font_body
   color bw_body
-  padding 50px
   max-width 800px
   min-width 600px
-  margin auto
+  margin 0 auto
+  padding 0
 
-h1
+h1, h2, h3, h4
   font-family font_title
   color bw_title
 
 a
   color flat_blue
   text-decoration none
+  cursor pointer
 
   &:hover
     color flat_dark_blue
@@ -33,6 +37,7 @@ a
 // Header's style
 
 header
+  padding 20px
   text-align center
   img
     width 200px
@@ -59,6 +64,10 @@ nav
       color bw_title
       border 2px solid bw_body
 
+// Section's style
+section
+  padding 0 50px
+
 // Aside's style
 
 aside
@@ -67,10 +76,33 @@ aside
   padding 20px
   width: 30%
   float left
-  margin-right 20px
   a
     color bw_body
     display block
     padding 10px
     &:hover
       border-bottom none
+    &.current
+      color flat_dark_blue
+
+// Content's style
+
+#documentation .content
+  margin-left 30%
+  width 70%
+  padding 0px 20px
+
+// Footer's style
+
+footer
+  position relative
+  clear both
+  padding-top 20px
+  p
+    font-family font_title
+    font-size 1.2em
+    text-align center
+    border-top 2px solid bw_border
+    margin 0
+    padding 10px
+    color bw_border
