@@ -1,23 +1,10 @@
 extends /partials/layout.jade
 block content
-  header
-    img(src="/assets/skeleton.png")
-    h1 AppSkeleton
-  nav
-    a(href="#")
-      i.fa.fa-home
-      | home
-    a(href="#documentation")
-      i.fa.fa-file-text
-      | documentation
-    a(href="https://github.com/jeremt/appSkeleton")
-      i.fa.fa-github
-      | github
   div#home(ng-controller="HomeCtrl")
     p.
       Simple skeleton of a web application which use feature such as:
     ul(ng-repeat="feature in features")
-      li() {{feature}}
+      li {{feature}}
   p 
     | Using the simple but powerful #[a(href="http://gulpjs.com") gulp ]
     | build system.
