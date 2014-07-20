@@ -1,3 +1,6 @@
 {
-  "files": ["gettingstarted", "introduction"]
+  "summary": [
+    {"id": "introduction", "name": "Introduction"},
+    {"id": "gettingstarted", "name": "Getting started"}
+  ]
 }

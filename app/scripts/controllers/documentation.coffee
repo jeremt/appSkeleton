@@ -5,17 +5,20 @@
 #
 class DocumentationCtrl
 
-  @$inject = ['$scope']
+  @$inject = ['$scope', '$http']
 
   # Instanciate the documentation controller and initialize the documentation
   # links of the sidebar.
   #
-  constructor: (@scope) ->
+  constructor: (@scope, @http) ->
     @scope.current = 0
-    @scope.links = [
-      {id: 'introduction', name: 'Introduction'}
-      {id: 'gettingstarted', name: 'Getting started'}
-    ]
+    @scope.links = []
+    @scope.error = null
+    @http.get('/documentation/tutorials/config.json').success (response) =>
+      if response.summary
+        @scope.links = response.summary
+      else
+        @scope.error = "no summary field in configuration file"
 
   getUrl: (link) ->
     "/documentation/tutorials/#{link.id}.html"
