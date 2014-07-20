@@ -29,7 +29,7 @@ class DocBuilder
   # @param {Object} options various options to configure the builder
   #
   constructor: (options = {}) ->
-    @options = DEFAULT_OPTIONS
+    @options = Object.create(DEFAULT_OPTIONS)
     for key, value of options
       @options[key] = value
 

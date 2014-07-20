@@ -45,7 +45,7 @@ class AppBuilder
   #
   constructor: (options = {}, @locals = {}) ->
     @watchList = {}
-    @options = DEFAULT_OPTIONS
+    @options = Object.create(DEFAULT_OPTIONS)
     for key, opt of options
       @options[key] = opt
 
