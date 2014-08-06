@@ -14,24 +14,28 @@ doc = new DocBuilder()
 
 # Tasks
 
+# App
 gulp.task "buildMarkup", -> app.buildMarkup()
 gulp.task "buildBrowserify", -> app.buildBrowserify()
 gulp.task "buildStyles", -> app.buildStyles()
 gulp.task "buildAssets", -> app.buildAssets()
-gulp.task "clean", -> app.clean()
 gulp.task "buildBower", -> bower().pipe(gulp.dest('build'))
-
-gulp.task "buildApi", -> doc.buildApi()
-gulp.task "buildTutorials", -> doc.buildTutorials()
-gulp.task "buildDocumentation", ["buildApi", "buildTutorials"]
-
-gulp.task "build", [
+gulp.task "cleanApp", -> app.clean()
+gulp.task "buildApp", [
   "buildMarkup"
   "buildBrowserify"
   "buildStyles"
   "buildAssets"
   "buildBower"
 ]
+
+# Doc
+gulp.task "buildApi", -> doc.buildApi()
+gulp.task "buildTutorials", -> doc.buildTutorials()
+gulp.task "buildDoc", ["buildApi", "buildTutorials"]
+
+# Common
+gulp.task "build", ["buildApp", "buildDoc"]
 
 gulp.task "serve", ["build"], ->
   browserSync.init null,
@@ -45,6 +49,5 @@ gulp.task "watch", ["serve"], ->
   for name, list of app.watchList
     for pattern in list
       gulp.watch pattern, [name]
-  # browserSync.reload()
 
 gulp.task 'default', ['watch']

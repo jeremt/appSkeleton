@@ -119,11 +119,18 @@ class AppBuilder
   # @param {String} folder application's folder which contains all assets
   # @param {Array<String>} ext the allowed extensions to copy
   #
-  buildAssets: (folder = "assets/", ext) ->
-    ext ?= DEFAULT_ASSETS_EXTENSIONS
+  buildAssets: (folder = "assets/", {include, exclude} = {}) ->
+    # TODO handle include and exclude extensions...
+    ext = DEFAULT_ASSETS_EXTENSIONS
     assets = @addFiles('Assets', ["#{folder}/**/*.{#{ext.join(',')}}"])
     gulp.src(assets)
       .pipe(gulp.dest(path.join(@options.dest, folder)))
+
+  build: ->
+    @buildMarkup()
+    @buildBrowserify()
+    @buildStyles()
+    @buildAssets()
 
   # Remove the build folder and all the files inside recursively.
   #
@@ -138,9 +145,10 @@ class AppBuilder
   #
   addFiles: (rule, files) ->
     throw new Error "Please, provide files to add." if not files?
-    @watchList["build#{rule}"] = (@watchList["build#{rule}"] ? []).concat(
-      path.join(@options.src, f) for f in files
-    )
+    files = (path.join(@options.src, f) for f in files)
+    @watchList["build#{rule}"] = (@watchList["build#{rule}"] ? [])
+      .concat(files)
+    files
 
   # Notify the error and end the current task.
   #
